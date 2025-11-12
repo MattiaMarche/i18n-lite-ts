@@ -139,9 +139,8 @@ const App: React.FC = () => {
 Need to change the default language used for fall backs?
 Just call:
 
-```html
-<a class="lang-en" href="./index.html?lang=en">English</a>
-<a class="lang-it" href="./index.html?lang=it">Inglese</a>
+```ts
+I18n.setDefaultLanguage( 'en' );
 ```
 
 
