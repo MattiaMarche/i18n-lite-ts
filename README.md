@@ -153,7 +153,7 @@ npm install
 npm run demo
 ```
 
-And open `http://127.0.0.1:5173/demo/` in your browser.
+And open [http://127.0.0.1:5173/demo/](http://127.0.0.1:5173/demo/) in your browser.
 
 
 ## Author
