@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="it" class="hide-scrollbar">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>I18n Lite - Demo</title>
+
+        <link rel="icon" type="image/png" href="./favicon.ico" />
+
+        <link rel="stylesheet" href="./global.css" />
+    </head>
+
+    <body>
+        <script type="module" src="./main.mjs"></script>
+
+
+        <header>
+            <a class="lang-en" href="./index.html?lang=it">Italian</a>
+            <a class="lang-it" href="./index.html?lang=it">Italiano</a>
+            <a class="lang-es" href="./index.html?lang=it">Italiano</a>
+
+            <a class="lang-en" href="./index.html?lang=en">English</a>
+            <a class="lang-it" href="./index.html?lang=en">Inglese</a>
+            <a class="lang-es" href="./index.html?lang=en">Inglés</a>
+
+            <a class="lang-en" href="./index.html?lang=es">Spanish</a>
+            <a class="lang-it" href="./index.html?lang=es">Spagnolo</a>
+            <a class="lang-es" href="./index.html?lang=es">Español</a>
+
+            <a class="lang-en" href="mailto:info@mattiamarchesini.com?subject=I18n Demo - Contacts">Contacts</a>
+            <a class="lang-it" href="mailto:info@mattiamarchesini.com?subject=I18n Demo - Contatti">Contatti</a>
+            <a class="lang-es" href="mailto:info@mattiamarchesini.com?subject=I18n Demo - Contactos">Contactos</a>
+        </header>
+
+
+        <main>
+            <p>
+                Lorem ipsum dolor sit amet.
+            </p>
+            <p class="lang-en">
+                This is a simple demonstration of the I18n Lite library.
+            </p>
+            <p class="lang-it">
+                Questa è una semplice dimostrazione della libreria I18n Lite.
+            </p>
+            <p class="lang-es">
+                Esta es una simple demostración de la biblioteca I18n Lite.
+            </p>
+            <button onclick="alert( window._i18n.t( 'greeting' ) );">
+                <span class="lang-en">Click here to see a langague based alert</span>
+                <span class="lang-it">Clicca qui per vedere un avviso basato sulla lingua</span>
+                <span class="lang-es">Haga clic aquí para ver una alerta basada en el idioma</span>
+            </button>
+        </main>
+
+
+        <footer>
+            © <span>
+                <script>
+                    document.write( new Date().getFullYear() );
+                </script>
+            </span> |
+            <span class="created-by">
+              Created by
+            </span>
+            <a href="mailto:info@mattiamarchesini.com">Mattia Marchesini</a>
+        </footer>
+    </body>
+</html>
