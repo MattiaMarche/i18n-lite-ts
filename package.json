@@ -1,6 +1,6 @@
 {
     "name": "@mattiamarchesini/i18n-lite-ts",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "TypeScript localization module created to add super simple translations to a web app.",
     "license": "MIT",
     "author": "Mattia Marchesini <info@mattiamarchesini.com>",

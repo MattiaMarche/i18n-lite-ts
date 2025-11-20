@@ -49,8 +49,8 @@ export class I18n {
      * @return {I18n} New instance of this class.
      */
     constructor ( lang: string | null, translations: Translations | string = {} ) {
-        this.setLang( lang );
-        this.setTranslations( translations );
+      this.setLang( lang );
+      this.setTranslations( translations );
     }
 
 
@@ -71,13 +71,13 @@ export class I18n {
      * @return {Promise<I18n>} Promise that resolves to the I18n instance.
      */
     public static async asyncInit( lang: string | null = null, translations: Translations | string = {} ): Promise<I18n> {
-        if ( !I18n._instance ) {
-            I18n._instance = new I18n( lang );
-            if ( translations ) {
-                await I18n._instance.setTranslations( translations );
-            }
+      if ( !I18n._instance ) {
+        I18n._instance = new I18n( lang );
+        if ( translations ) {
+          await I18n._instance.setTranslations( translations );
         }
-        return I18n._instance;
+      }
+      return I18n._instance;
     }
 
     /**
@@ -92,10 +92,10 @@ export class I18n {
      * @return {I18n} I18n instance.
      */
     public static init( lang: string | null = null, translations: Translations | string = {} ): I18n {
-        if ( !I18n._instance ) {
-            I18n._instance = new I18n( lang, translations );
-        }
-        return I18n._instance;
+      if ( !I18n._instance ) {
+        I18n._instance = new I18n( lang, translations );
+      }
+      return I18n._instance;
     }
 
     /**
@@ -104,9 +104,34 @@ export class I18n {
      * @return {void}
      */
     public static setDefaultLanguage ( lang: string ): void {
-        if ( lang && typeof lang === 'string' ) {
-            I18n.DEFAULT_LANG = lang;
-        }
+      if ( lang && typeof lang === 'string' ) {
+        I18n.DEFAULT_LANG = lang;
+      }
+    }
+
+    /**
+     * @description {string} Converts a date to a localized date string.
+     * @param {string | Date} value Date to convert (can be a Date object or a date string).
+     * @param {string} locale Locale code to use for formatting (e.g., 'en-US', 'it-IT').
+     * @param {Intl.DateTimeFormatOptions} options (Optional) Formatting options.
+     * Default: { day: '2-digit', month: '2-digit', year: 'numeric' }.
+     * @return {string} Localized date string.
+     */
+    public static staticToDateString (
+      value: string | Date,
+      locale: string,
+      options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }
+    ): string {
+      const date = value instanceof Date ? value : new Date( value );
+      // If date is invalid return an empty string
+      if ( isNaN( date.getTime() ) ) {
+        return '';
+      }
+      return new Intl.DateTimeFormat( locale, options ).format( date );
     }
 
     /**
@@ -115,10 +140,10 @@ export class I18n {
      * @return {I18n} Default i18n instance.
      */
     public static get instance(): I18n {
-        if ( !I18n._instance ) {
-            I18n._instance = new I18n( I18n.DEFAULT_LANG );
-        }
-        return I18n._instance;
+      if ( !I18n._instance ) {
+        I18n._instance = new I18n( I18n.DEFAULT_LANG );
+      }
+      return I18n._instance;
     }
 
 
@@ -133,7 +158,7 @@ export class I18n {
      * @return {string} Translated string.
      */
     public _t( key: string ): string {
-        return this.t( key );
+      return this.t( key );
     }
 
     /**
@@ -144,27 +169,27 @@ export class I18n {
      * @return {string} Detected language code (e.g., 'en', 'it').
      */
     public detectLanguage () {
-        let urlParams: URLSearchParams = new URLSearchParams( window.location.search );
-        let lang: string = I18n.DEFAULT_LANG;
-        if ( urlParams && urlParams.has( 'lang' ) ) {
-            lang = ( urlParams.get( 'lang' ) as string ).toLowerCase();
-        } else if ( window && window.navigator ) {
-            lang = window.navigator.language || ( window.navigator as any ).userLanguage;
-        }
-        if ( lang.indexOf( '-' ) !== -1 ) {
-            lang = lang.split( '-' )[0].toLowerCase();
-        } else {
-            lang = lang.toLowerCase();
-        }
-        return lang;
-    };
+      let urlParams: URLSearchParams = new URLSearchParams( window.location.search );
+      let lang: string = I18n.DEFAULT_LANG;
+      if ( urlParams && urlParams.has( 'lang' ) ) {
+        lang = ( urlParams.get( 'lang' ) as string ).toLowerCase();
+      } else if ( window && window.navigator ) {
+        lang = window.navigator.language || ( window.navigator as any ).userLanguage;
+      }
+      if ( lang.indexOf( '-' ) !== -1 ) {
+        lang = lang.split( '-' )[0].toLowerCase();
+      } else {
+        lang = lang.toLowerCase();
+      }
+      return lang;
+    }
 
     /**
      * @description {string} Get the current language code.
      * @return {string} Current language code.
      */
     public getLang(): string {
-        return this.lang;
+      return this.lang;
     }
 
     /**
@@ -176,7 +201,7 @@ export class I18n {
      */
     public setLang( lang: string | null ): void {
         if ( lang === null ) {
-            lang = this.detectLanguage();
+          lang = this.detectLanguage();
         }
         if ( !lang ) {
           return;
@@ -191,36 +216,36 @@ export class I18n {
      * @return {Promise<boolean>} Promise that resolves when translations are set, with a boolean indicating whether the translations were successfully set.
      */
     public async setTranslations( translations: { [key: string]: { [key: string]: string } } | string ): Promise<boolean> {
-        if ( typeof translations === 'string' ) {
-            if ( translations.startsWith( 'http' ) || translations.startsWith( '/' ) ) {
-                await fetch( translations )
-                    .then( response => response.json() )
-                    .then( data => {
-                        this.translations = data;
-                        this.initialized = true;
-                    } )
-                    .catch( error => {
-                        console.warn( '[I18n.setTranslations] Warning: failed to fetch translations from URL.', error );
-                        this.translations = {};
-                        this.initialized = false;
-                    });
-                return this.initialized;
-            }
-            try {
-                this.translations = JSON.parse( translations );
-                this.initialized = true;
-                return this.initialized;
-            } catch ( error: any ) {
-                console.warn( '[I18n.setTranslations] Warning: failed to parse translations JSON string.', error );
-                this.translations = {};
-                this.initialized = false;
-                return this.initialized;
-            }
-        } else {
-            this.translations = translations;
-            this.initialized = true;
-            return this.initialized;
+      if ( typeof translations === 'string' ) {
+        if ( translations.startsWith( 'http' ) || translations.startsWith( '/' ) ) {
+          await fetch( translations )
+            .then( response => response.json() )
+            .then( data => {
+              this.translations = data;
+              this.initialized = true;
+            } )
+            .catch( error => {
+              console.warn( '[I18n.setTranslations] Warning: failed to fetch translations from URL.', error );
+              this.translations = {};
+              this.initialized = false;
+            });
+          return this.initialized;
         }
+        try {
+          this.translations = JSON.parse( translations );
+          this.initialized = true;
+          return this.initialized;
+        } catch ( error: any ) {
+          console.warn( '[I18n.setTranslations] Warning: failed to parse translations JSON string.', error );
+          this.translations = {};
+          this.initialized = false;
+          return this.initialized;
+        }
+      } else {
+        this.translations = translations;
+        this.initialized = true;
+        return this.initialized;
+      }
     }
 
     /**
@@ -230,13 +255,31 @@ export class I18n {
      * @return {string} Translated string.
      */
     public t( key: string ): string {
-        if ( this.translations.hasOwnProperty( this.lang ) ) {
-            return this.translations[ this.lang ][ key ] || key;
-        }
-        if ( !this.translations.hasOwnProperty( I18n.DEFAULT_LANG ) ) {
-            return key;
-        }
-        return this.translations[ I18n.DEFAULT_LANG ][ key ] || key;
+      if ( this.translations.hasOwnProperty( this.lang ) ) {
+        return this.translations[ this.lang ][ key ] || key;
+      }
+      if ( !this.translations.hasOwnProperty( I18n.DEFAULT_LANG ) ) {
+        return key;
+      }
+      return this.translations[ I18n.DEFAULT_LANG ][ key ] || key;
+    }
+
+    /**
+     * @description {string} Converts a date to a localized date string using the current language.
+     * @param {string | Date} value Date to convert (can be a Date object or a date string).
+     * @param {Intl.DateTimeFormatOptions} options (Optional) Formatting options.
+     * Default: { day: '2-digit', month: '2-digit', year: 'numeric' }.
+     * @return {string} Localized date string.
+     */
+    public toDateString (
+      value: string | Date,
+      options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }
+    ): string {
+      return I18n.staticToDateString( value, this.lang, options );
     }
 
     /**
@@ -246,6 +289,6 @@ export class I18n {
      * @return {string} Translated string.
      */
     public translate( key: string ): string {
-        return this.t( key );
+      return this.t( key );
     }
 }
