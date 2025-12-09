@@ -24,6 +24,7 @@ export class I18n {
      * @description {boolean} Whether this instance has been initialized.
      */
     private initialized: boolean = false;
+    // TODO: add strong typing/enumeration for language codes, evaluate if enforcing 5 digits codes (e.g., 'en-US', 'it-IT') would create a standard without adding complexity.
     /**
      * @description {string} Language code to use for this instance.
      */
@@ -43,6 +44,9 @@ export class I18n {
      * @param {string | null} lang Language code to use for this instance.
      * If null, the language will be detected automatically: first checking the 'lang' query parameter in the URL,
      * then falling back to the browser's language settings.
+     * To simplify usage, it's suggested to use a 2-letter language code (e.g., 'en', 'it').
+     * Extended language codes (e.g., 'en-US', 'it-IT') would be only useful for date formatting.
+     * Default: null (browser detection).
      * @param {Translations | string} translations Translations to use for this instance.
      * Can be an object, a JSON string or an URL used to fetch the translations from.
      * Default: {}.
@@ -113,7 +117,7 @@ export class I18n {
      * @description {string} Converts a string representing a date to a Date object, considering
      * the specified locale to parse the date correctly.
      * @param {string | Date} value String to convert to a Date object.
-     * @param {string} locale Locale code to use for formatting (e.g., 'en-US', 'it-IT').
+     * @param {string} locale Locale code to use for formatting (e.g., 'en', 'it', 'us', 'en-US', 'it-IT').
      * @return {Date} Converted Date object.
      */
     public static staticToDate (
@@ -151,7 +155,7 @@ export class I18n {
     /**
      * @description {string} Converts a date to a localized date string.
      * @param {string | Date} value Date to convert (can be a Date object or a date string).
-     * @param {string} locale Locale code to use for formatting (e.g., 'en-US', 'it-IT').
+     * @param {string} locale Locale code to use for formatting (e.g., 'en', 'it', 'us', 'en-US', 'it-IT').
      * @param {Intl.DateTimeFormatOptions} options (Optional) Formatting options.
      * Default: { day: '2-digit', month: '2-digit', year: 'numeric' }.
      * @return {string} Localized date string.
