@@ -110,6 +110,45 @@ export class I18n {
     }
 
     /**
+     * @description {string} Converts a string representing a date to a Date object, considering
+     * the specified locale to parse the date correctly.
+     * @param {string | Date} value String to convert to a Date object.
+     * @param {string} locale Locale code to use for formatting (e.g., 'en-US', 'it-IT').
+     * @return {Date} Converted Date object.
+     */
+    public static staticToDate (
+      value: string,
+      locale: string
+    ): Date {
+      const parts = value.match( /(\d+)/g );
+      if ( !parts ) {
+        return new Date( NaN );
+      }
+      let day: number, month: number, year: number;
+      switch ( locale ) {
+        case 'it':
+        case 'it-IT':
+          day = parseInt( parts[0], 10 );
+          month = parseInt( parts[1], 10 ) - 1;
+          year = parseInt( parts[2], 10 );
+          break;
+        case 'en-US':
+        case 'us':
+          month = parseInt( parts[0], 10 ) - 1;
+          day = parseInt( parts[1], 10 );
+          year = parseInt( parts[2], 10 );
+          break;
+        default:
+          // Default to 'en' format
+          year = parseInt( parts[0], 10 );
+          month = parseInt( parts[1], 10 ) - 1;
+          day = parseInt( parts[2], 10 );
+          break;
+      }
+      return new Date( year, month, day );
+    }
+
+    /**
      * @description {string} Converts a date to a localized date string.
      * @param {string | Date} value Date to convert (can be a Date object or a date string).
      * @param {string} locale Locale code to use for formatting (e.g., 'en-US', 'it-IT').
@@ -262,6 +301,15 @@ export class I18n {
         return key;
       }
       return this.translations[ I18n.DEFAULT_LANG ][ key ] || key;
+    }
+
+    /**
+     * @description {Date} Converts a string representing a date to a Date object using the current language.
+     * @param {string} value String to convert to a Date object.
+     * @return {Date} Converted Date object.
+     */
+    public toDate ( value: string ): Date {
+      return I18n.staticToDate( value, this.lang );
     }
 
     /**
